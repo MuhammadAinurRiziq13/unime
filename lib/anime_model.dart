@@ -1,50 +1,36 @@
-class AnimesResponse {
-  final List<AnimeInfo> data;
-
-  AnimesResponse({required this.data});
-
-  factory AnimesResponse.fromJson(Map<String, dynamic> json) {
-    var list = json['data'] as List;
-    List<AnimeInfo> animeList = list.map((i) => AnimeInfo.fromJson(i)).toList();
-    return AnimesResponse(data: animeList);
-  }
-}
-
 class AnimeInfo {
-  final Node node;
+  final int id;
+  final String title;
+  final MainPicture? mainPicture;
+  double? mean;
 
-  AnimeInfo({required this.node});
+  AnimeInfo({
+    required this.id,
+    required this.title,
+    this.mainPicture,
+    this.mean,
+  });
 
   factory AnimeInfo.fromJson(Map<String, dynamic> json) {
     return AnimeInfo(
-      node: Node.fromJson(json['node']),
+      id: json['node']['id'],
+      title: json['node']['title'],
+      mainPicture: json['node']['main_picture'] != null
+          ? MainPicture.fromJson(json['node']['main_picture'])
+          : null,
     );
   }
-}
 
-class Node {
-  final int id;
-  final String title;
-  final MainPicture mainPicture;
-  final double? mean;
-
-  Node({required this.id, required this.title, required this.mainPicture, this.mean});
-
-  factory Node.fromJson(Map<String, dynamic> json) {
-    return Node(
-      id: json['id'],
-      title: json['title'],
-      mainPicture: MainPicture.fromJson(json['main_picture']),
-      mean: json['mean']?.toDouble(),
-    );
+  void updateMean(double? newMean) {
+    mean = newMean;
   }
 }
 
 class MainPicture {
-  final String medium;
-  final String large;
+  final String? medium;
+  final String? large;
 
-  MainPicture({required this.medium, required this.large});
+  MainPicture({this.medium, this.large});
 
   factory MainPicture.fromJson(Map<String, dynamic> json) {
     return MainPicture(
